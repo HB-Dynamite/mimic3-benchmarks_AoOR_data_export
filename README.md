@@ -1,3 +1,12 @@
+=========================
+This is a fork of the MIMIC-III benchmarks repo.
+
+We use the code of this benchmark to export the features for our experiments. 
+Specifically, we use the in-hospital mortality task and extend the task to classify length of stay using the same features. 
+
+To replicate our dataset, you can follow the steps of the original repository as listed below. 
+We have added the some explanatory comments in bold **looks like this**.
+
 MIMIC-III Benchmarks
 =========================
 
@@ -102,9 +111,10 @@ Here are the required steps to build the benchmark. It assumes that you already 
        python -m mimic3benchmark.scripts.split_train_and_test data/root/
 ```
 
-5. The following commands will generate task-specific datasets, which can later be used in models. These commands are independent, if you are going to work only on one benchmark task, you can run only the corresponding command.
+5. The following commands will generate task-specific datasets, which can later be used in models. These commands are independent, if you are going to work only on one benchmark task, you can run only the corresponding command.**(To replicate our dataset, you only need to run the first line to create the in-hospital-mortality task-specific dataset)**.
 ```bash
        python -m mimic3benchmark.scripts.create_in_hospital_mortality data/root/ data/in-hospital-mortality/
+       
        python -m mimic3benchmark.scripts.create_decompensation data/root/ data/decompensation/
        python -m mimic3benchmark.scripts.create_length_of_stay data/root/ data/length-of-stay/
        python -m mimic3benchmark.scripts.create_phenotyping data/root/ data/phenotyping/
@@ -160,18 +170,22 @@ Use the following command to extract validation set from the training set. This 
 ```bash
        python -m mimic3models.split_train_val {dataset-directory}
 ```
-`{dataset-directory}` can be either `data/in-hospital-mortality`, `data/decompensation`, `data/length-of-stay`, `data/phenotyping` or `data/multitask`.
+`{dataset-directory}` can be either `data/in-hospital-mortality`, `data/decompensation`, `data/length-of-stay`, `data/phenotyping` or `data/multitask`. 
+
+**(>>you only need the in-hospital-mortality case to replicate our results<<)**
 
 
 ### In-hospital mortality prediction
 
-Run the following command to train the neural network which gives the best result. We got the best performance on validation set after 28 epochs.
-```bash
-       python -um mimic3models.in_hospital_mortality.main --network mimic3models/keras_models/lstm.py --dim 16 --timestep 1.0 --depth 2 --dropout 0.3 --mode train --batch_size 8 --output_dir mimic3models/in_hospital_mortality
-```
 Use the following command to train logistic regression. The best model we got used L2 regularization with `C=0.001`:
 ```bash
        python -um mimic3models.in_hospital_mortality.logistic.main --l2 --C 0.001 --output_dir mimic3models/in_hospital_mortality/logistic
+```
+**(by running this you will create a data frame and save it as a csv in the main dir, you can use this csv as input data for our experiments)**
+
+Run the following command to train the neural network which gives the best result. We got the best performance on validation set after 28 epochs.
+```bash
+       python -um mimic3models.in_hospital_mortality.main --network mimic3models/keras_models/lstm.py --dim 16 --timestep 1.0 --depth 2 --dropout 0.3 --mode train --batch_size 8 --output_dir mimic3models/in_hospital_mortality
 ```
 ### Decompensation prediction
 
