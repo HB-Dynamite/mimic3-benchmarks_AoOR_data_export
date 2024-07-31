@@ -1,11 +1,10 @@
-=========================
 This is a fork of the MIMIC-III benchmarks repo.
 
 We use the code of this benchmark to export the features for our experiments. 
 Specifically, we use the in-hospital mortality task and extend the task to classify length of stay using the same features. 
 
 To replicate our dataset, you can follow the steps of the original repository as listed below. 
-We have added the some explanatory comments in bold **looks like this**.
+We have added the some explanatory comments in bold (**>> looks like this <<**).
 
 MIMIC-III Benchmarks
 =========================
@@ -181,7 +180,7 @@ Use the following command to train logistic regression. The best model we got us
 ```bash
        python -um mimic3models.in_hospital_mortality.logistic.main --l2 --C 0.001 --output_dir mimic3models/in_hospital_mortality/logistic
 ```
-**(by running this you will create a data frame and save it as a csv in the main dir, you can use this csv as input data for our experiments)**
+**(>>by running this you will create a data frame and save it as a csv in the main dir, you can use this csv as input data for our experiments<<)**
 
 Run the following command to train the neural network which gives the best result. We got the best performance on validation set after 28 epochs.
 ```bash
