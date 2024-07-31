@@ -110,7 +110,7 @@ Here are the required steps to build the benchmark. It assumes that you already 
        python -m mimic3benchmark.scripts.split_train_and_test data/root/
 ```
 
-5. The following commands will generate task-specific datasets, which can later be used in models. These commands are independent, if you are going to work only on one benchmark task, you can run only the corresponding command.**(To replicate our dataset, you only need to run the first line to create the in-hospital-mortality task-specific dataset)**.
+5. The following commands will generate task-specific datasets, which can later be used in models. These commands are independent, if you are going to work only on one benchmark task, you can run only the corresponding command. **(>> To replicate our dataset, you only need to run the first line to create the in-hospital-mortality task-specific dataset <<)**.
 ```bash
        python -m mimic3benchmark.scripts.create_in_hospital_mortality data/root/ data/in-hospital-mortality/
        
