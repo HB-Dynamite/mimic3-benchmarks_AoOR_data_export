@@ -2,20 +2,27 @@ import os
 import argparse
 import pandas as pd
 import random
+
 random.seed(49297)
 from tqdm import tqdm
 
 
-def process_partition(args, partition, eps=1e-6, n_hours=48):
+def process_partition(args, partition, eps=1e-6, n_hours=24):
     output_dir = os.path.join(args.output_path, partition)
     if not os.path.exists(output_dir):
         os.mkdir(output_dir)
 
     xy_pairs = []
-    patients = list(filter(str.isdigit, os.listdir(os.path.join(args.root_path, partition))))
-    for patient in tqdm(patients, desc='Iterating over patients in {}'.format(partition)):
+    patients = list(
+        filter(str.isdigit, os.listdir(os.path.join(args.root_path, partition)))
+    )
+    for patient in tqdm(
+        patients, desc="Iterating over patients in {}".format(partition)
+    ):
         patient_folder = os.path.join(args.root_path, partition, patient)
-        patient_ts_files = list(filter(lambda x: x.find("timeseries") != -1, os.listdir(patient_folder)))
+        patient_ts_files = list(
+            filter(lambda x: x.find("timeseries") != -1, os.listdir(patient_folder))
+        )
 
         for ts_filename in patient_ts_files:
             with open(os.path.join(patient_folder, ts_filename)) as tsfile:
@@ -25,9 +32,11 @@ def process_partition(args, partition, eps=1e-6, n_hours=48):
                 # empty label file
                 if label_df.shape[0] == 0:
                     continue
-
                 mortality = int(label_df.iloc[0]["Mortality"])
-                los = 24.0 * label_df.iloc[0]['Length of Stay']  # in hours
+                los = 24.0 * label_df.iloc[0]["Length of Stay"]  # in hours
+                age = label_df.iloc[0]["Age"]
+                gender = label_df.iloc[0]["Gender"]
+                ethnicity = label_df.iloc[0]["Ethnicity"]
                 if pd.isnull(los):
                     print("\n\t(length of stay is missing)", patient, ts_filename)
                     continue
@@ -38,10 +47,13 @@ def process_partition(args, partition, eps=1e-6, n_hours=48):
                 ts_lines = tsfile.readlines()
                 header = ts_lines[0]
                 ts_lines = ts_lines[1:]
-                event_times = [float(line.split(',')[0]) for line in ts_lines]
+                event_times = [float(line.split(",")[0]) for line in ts_lines]
 
-                ts_lines = [line for (line, t) in zip(ts_lines, event_times)
-                            if -eps < t < n_hours + eps]
+                ts_lines = [
+                    line
+                    for (line, t) in zip(ts_lines, event_times)
+                    if -eps < t < n_hours + eps
+                ]
 
                 # no measurements in ICU
                 if len(ts_lines) == 0:
@@ -54,7 +66,9 @@ def process_partition(args, partition, eps=1e-6, n_hours=48):
                     for line in ts_lines:
                         outfile.write(line)
 
-                xy_pairs.append((output_ts_filename, mortality))
+                xy_pairs.append(
+                    (output_ts_filename, mortality, los, age, gender, ethnicity)
+                )
 
     print("Number of created samples:", len(xy_pairs))
     if partition == "train":
@@ -63,15 +77,27 @@ def process_partition(args, partition, eps=1e-6, n_hours=48):
         xy_pairs = sorted(xy_pairs)
 
     with open(os.path.join(output_dir, "listfile.csv"), "w") as listfile:
-        listfile.write('stay,y_true\n')
-        for (x, y) in xy_pairs:
-            listfile.write('{},{:d}\n'.format(x, y))
+        listfile.write("stay,y_true,los,age,gender,ethnicity\n")
+        for x, y, los, age, gender, ethnicity in xy_pairs:
+            listfile.write(
+                "{},{:d},{:.2f},{},{},{}\n".format(x, y, los, age, gender, ethnicity)
+            )
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Create data for in-hospital mortality prediction task.")
-    parser.add_argument('root_path', type=str, help="Path to root folder containing train and test sets.")
-    parser.add_argument('output_path', type=str, help="Directory where the created data should be stored.")
+    parser = argparse.ArgumentParser(
+        description="Create data for in-hospital mortality prediction task."
+    )
+    parser.add_argument(
+        "root_path",
+        type=str,
+        help="Path to root folder containing train and test sets.",
+    )
+    parser.add_argument(
+        "output_path",
+        type=str,
+        help="Directory where the created data should be stored.",
+    )
     args, _ = parser.parse_known_args()
 
     if not os.path.exists(args.output_path):
@@ -81,5 +107,5 @@ def main():
     process_partition(args, "train")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

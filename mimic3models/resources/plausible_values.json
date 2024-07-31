@@ -1,0 +1,76 @@
+{
+    "Hours": {
+    "upper_bound": 1000,
+    "lower_bound": 0
+    },
+    "Glucose": {
+      "upper_bound": 2000,
+      "lower_bound": 5
+    },
+    "Systolic blood pressure": {
+      "upper_bound": 400,
+      "lower_bound": 0
+    },
+    "Temperature": {
+      "upper_bound": 45,
+      "lower_bound": 20
+    },
+    "Weight": {
+      "upper_bound": 500,
+      "lower_bound": 20
+    },
+    "Diastolic blood pressure": {
+      "upper_bound": 350,
+      "lower_bound": 20
+    },
+    "Glascow coma scale eye opening": {
+        "upper_bound": 4,
+        "lower_bound": 1
+    },
+    "Glascow coma scale motor response": {
+        "upper_bound": 6,
+        "lower_bound": 1
+    },
+    "Glascow coma scale verbal response": {
+        "upper_bound": 5,
+        "lower_bound": 1
+    },
+    "Glascow coma scale total": {
+        "upper_bound": 15,
+        "lower_bound": 3
+    },
+    
+    "Mean blood pressure": {
+      "upper_bound": 400,
+      "lower_bound": 20
+    },
+    "Heart Rate": {
+      "upper_bound": 300,
+      "lower_bound": 10
+    },
+    "Oxygen saturation": {
+      "upper_bound": 100,
+      "lower_bound": 20
+    },
+    "pH": {
+      "upper_bound": 9,
+      "lower_bound": 5
+    },
+    "Height": {
+      "upper_bound": 260,
+      "lower_bound": 100
+    },
+    "Respiratory rate": {
+      "upper_bound": 50,
+      "lower_bound": 5
+    },
+    "Capillary refill rate":{
+      "upper_bound": 10000,
+      "lower_bound": 0
+    },
+    "Fraction inspired oxygen": {
+      "upper_bound": 100,
+      "lower_bound": 0
+    }
+    
+  }
