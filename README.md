@@ -1,10 +1,10 @@
-This is a fork of the MIMIC-III benchmarks repo.
+***This is a fork of the MIMIC-III benchmarks repo.***
 
 We use the code of this benchmark to export the features for our experiments. 
 Specifically, we use the in-hospital mortality task and extend the task to classify length of stay using the same features. 
 
 To replicate our dataset, you can follow the steps of the original repository as listed below. 
-We have added the some explanatory comments in bold (**>> looks like this <<**).
+We have added some explanatory comments in bold (**>> looks like this <<**).
 
 MIMIC-III Benchmarks
 =========================
